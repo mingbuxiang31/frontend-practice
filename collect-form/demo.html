@@ -33,7 +33,57 @@
   <footer>
     <p>软件开发综合实践课程演示</p>
   </footer>
-
+<table border="1">
+    <caption>上周反馈统计</caption>
+    <thead>
+        <tr>
+            <th>项目</th>
+            <th>数量</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>已提交</td>
+            <td>35</td>
+        </tr>
+        <tr>
+            <td>待处理</td>
+            <td>4</td>
+        </tr>
+    </tbody>
+</table>
+<form action="#" method="get">
+    <p>课程评分</p>
+    <label>
+        <input type="radio" name="score" value="好">好
+    </label>
+    <label><input type="radio" name="score" value="中">中</label>
+    <label><input type="radio" name="score" value="差">差</label>
+<p>感兴趣的主题</p>
+<label><input type="checkbox" name="aaa" value="html">HTML</label>
+<label><input type="checkbox" name="aaa" value="css">css</label>
+<label><input type="checkbox" name="aaa" value="js">js</label>
+    <hr>
+<label>
+    年级
+    <select name="sss">
+        <option value="">please choose</option>
+        <option value="1">大一</option>
+        <option value="2">大二</option>
+    </select>
+    <label>
+        姓名
+        <input type="text" name="bbb">
+        出生年月
+        <input type="date" name="birthday">
+        邮箱
+        <input type="email" name="mail">
+    </label>
+</label>
+<p></p>
+<button type="submit">提交</button>
+<button type="reset">重置</button>
+</form>
 </body>
 
 </html>
