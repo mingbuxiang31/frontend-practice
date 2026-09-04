@@ -1,89 +1,59 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title></title>
-
+  <title>课程反馈</title>
 </head>
-
 <body>
-<header>
-    <h1>课程反馈系统</h1>
+  <header>
+    <h1>课程反馈</h1>
+    <p>你的意见直接改进下一次授课</p>
   </header>
   <nav>
-    <a href="#form">填写反馈</a>
-    <a href="#intro">说明</a>
+    <a href="#intro">填写说明</a>
+    <a href="#form">开始填写</a>
   </nav>
   <main>
     <section id="intro">
       <h2>填写说明</h2>
-      <p>请如实填写，匿名处理。</p>
+      <p>匿名收集，仅用于改进教学，两分钟填完。</p>
     </section>
     <section id="form">
       <h2>反馈表单</h2>
-      <!-- 表单放这里 -->
+      <p>（表单下一步填在这里）</p>
     </section>
   </main>
   <footer>
-    <p>软件开发综合实践课程演示</p>
+    <p>软件开发综合实践 · 课程演示案例</p>
   </footer>
-<table border="1">
-    <caption>上周反馈统计</caption>
-    <thead>
-        <tr>
-            <th>项目</th>
-            <th>数量</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>已提交</td>
-            <td>35</td>
-        </tr>
-        <tr>
-            <td>待处理</td>
-            <td>4</td>
-        </tr>
-    </tbody>
-</table>
 <form action="#" method="get">
-    <p>课程评分</p>
-    <label>
-        <input type="radio" name="score" value="好">好
-    </label>
-    <label><input type="radio" name="score" value="中">中</label>
-    <label><input type="radio" name="score" value="差">差</label>
-<p>感兴趣的主题</p>
-<label><input type="checkbox" name="aaa" value="html">HTML</label>
-<label><input type="checkbox" name="aaa" value="css">css</label>
-<label><input type="checkbox" name="aaa" value="js">js</label>
-    <hr>
-<label>
-    年级
-    <select name="sss">
-        <option value="">please choose</option>
-        <option value="1">大一</option>
-        <option value="2">大二</option>
-    </select>
-    <label>
-        姓名
-        <input type="text" name="bbb">
-        出生年月
-        <input type="date" name="birthday">
-        邮箱
-        <input type="email" name="mail">
-    </label>
-</label>
-<p></p>
-<button type="submit">提交</button>
-<button type="reset">重置</button>
+  <p>
+    <label for="name">姓名（可填昵称）</label>
+    <input type="text" id="name" name="name" placeholder="怎么称呼你" required>
+  </p>
+  <p>
+    <label for="mail">邮箱</label>
+    <input type="email" id="mail" name="mail" required>
+  </p>
+  <p>课程评分</p>
+  <p>
+    <label><input type="radio" name="score" value="5" checked> 很好</label>
+    <label><input type="radio" name="score" value="4"> 好</label>
+    <label><input type="radio" name="score" value="3"> 一般</label>
+  </p>
+  <p>想深入的主题（可多选）</p>
+  <p>
+    <label><input type="checkbox" name="topic" value="layout"> 页面布局</label>
+    <label><input type="checkbox" name="topic" value="js"> JavaScript</label>
+    <label><input type="checkbox" name="topic" value="chart"> 数据可视化</label>
+  </p>
+  <p>
+    <label for="advice">具体建议</label><br>
+    <textarea id="advice" name="advice" rows="4" maxlength="200" placeholder="说点什么"></textarea>
+  </p>
+  <p> <button type="submit">提交反馈</button>
+  </p>
 </form>
 </body>
-
 </html>
