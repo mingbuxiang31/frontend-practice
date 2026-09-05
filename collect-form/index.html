@@ -29,4 +29,59 @@
             <p>自主选题</p>
         </footer>
     </body>
+    <table border="1">
+        <thead>
+            <tr><th>项目</th>
+                <th>数量</th>
+                </tr>
+           
+        </thead>
+        <tbody>
+            <tr><td>已收集</td>
+            <td>90</td>
+            </tr>
+            <tr><td>应收集</td><td>100</td></tr>
+            
+        </tbody>
+    </table>
+    <br>
+    <form action="#" method="get">
+        <p>是否吸烟</p>
+        <label>
+            <input type="radio" name="boolean" value="yes">yes
+        </label>
+        <label><input type="radio" name="boolean" value="no">no</label>
+        <label>
+            <p>
+        吸烟频率（如不抽，可跳过）
+        </p>
+        <select name="frequence">
+            <option value="">请选择</option>
+            <option value="1">一天三次</option>
+            <option value="2">三天三次</option>
+        </select>
+        </label>
+        <p>个人信息采集</p>
+<label>
+    用户名
+    <input type="text" name="name" required>
+</label>
+<br>
+<label>邮箱
+    <input type="email" name="mail">
+</label>
+<br>
+<label>生日
+    <input type="date" name="date">
+</label>
+<br>
+<label>
+    对本次调研的建议
+    <textarea name="advice" rows="3" maxlength="200" placeholder="留下宝贵的建议"></textarea>
+</label>
+<p></p>
+<button type="submit">提交</button>
+<p></p>
+<button type="reset">重置</button>
+    </form>
 </html>
