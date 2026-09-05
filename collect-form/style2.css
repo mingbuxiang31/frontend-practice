@@ -1,0 +1,62 @@
+* {
+    box-sizing:border-box
+}
+body{
+    font-family:'Times New Roman', Times, serif;
+    color:black;
+    line-height: 1.5;
+    background-color: aliceblue;
+    width: 700px;
+    margin: 50px;
+    padding: 16px;
+
+}
+header{
+    text-align: center;
+}
+nav{
+    text-align: center;
+    margin-bottom: 15px;
+
+}
+nav a{
+    color: blue;
+    margin: 20px;
+}
+section{
+    background-color: beige;
+    border: 2px solid greenyellow;
+    border-radius: 4px;
+    padding-top: 16px;
+    margin-top: 20px;
+}
+
+footer{
+    text-align: center;
+    color: dimgrey;
+    font-size: 14px;
+}
+table  {
+width:50%;
+height:30px;
+}
+tr{
+    text-align: justify;
+    color: brown;
+}
+input, textarea, select {
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+button{
+
+padding: 10px;
+border:2px;
+margin:10px;
+background-color: chocolate;
+color: aliceblue;
+font-size: 16px;
+}
