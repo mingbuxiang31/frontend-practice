@@ -48,9 +48,9 @@
     <form action="#" method="get">
         <p>是否吸烟</p>
         <label>
-            <input type="radio" name="boolean" value="yes">yes
+            <input type="radio" name="boolean" value="yes" required>yes
         </label>
-        <label><input type="radio" name="boolean" value="no">no</label>
+        <label><input type="radio" name="boolean" value="no" required>no</label>
         <label>
             <p>
         吸烟频率（如不抽，可跳过）
@@ -64,11 +64,11 @@
         <p>个人信息采集</p>
 <label>
     用户名
-    <input type="text" name="name" required>
+    <input type="text" name="name" required max="10">
 </label>
 <br>
 <label>邮箱
-    <input type="email" name="mail">
+    <input type="email" name="mail" required maxlength="20">
 </label>
 <br>
 <label>生日
