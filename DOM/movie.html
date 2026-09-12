@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>电影清单</title>
+    <style>
+        body { font-family: sans-serif; max-width:650px; margin:20px auto; padding:0 10px; }
+        .error { color:red; margin:8px 0; }
+        table { width:100%; border-collapse: collapse; margin-top:15px; }
+        td,th { border:1px solid #999; padding:6px; }
+        .edit-panel { margin:10px 0; padding:10px; border:1px solid #666; display:none; }
+        input { margin:4px; padding:4px; }
+        button { margin:3px; padding:4px 8px; }
+    </style>
+</head>
+<body>
+<h2>电影清单管理</h2>
+
+<div>
+    电影名：<input class="mName">
+    导演：<input class="mDirector">
+    评分：<input class="mScore">
+    <button class="btnAdd">添加</button>
+</div>
+<div class="error errMsg"></div>
+
+<div class="edit-panel editPanel">
+    <h4>修改</h4>
+    电影名：<input class="eName">
+    导演：<input class="eDirector">
+    评分：<input class="eScore">
+    <input type="hidden" class="editIdx">
+    <button class="btnSaveEdit">保存修改</button>
+    <button class="btnCancel">取消</button>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>电影名称</th>
+            <th>导演</th>
+            <th>评分</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody class="tableBody"></tbody>
+</table>
+<script src="core.js"></script>
+</body>
+</html>
