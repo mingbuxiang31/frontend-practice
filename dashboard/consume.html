@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园消费数据看板</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .chart-box { height: 360px; }
+    #status { display: none; }
+  </style>
+</head>
+<body class="container py-4">
+  <h1>校园消费数据看板</h1>
+  <p id="sub-title">数据来源：本地模拟数据集</p>
+
+  <p id="status" class="alert alert-warning"></p>
+
+  <section class="row g-3 mb-4" id="cards"></section>
+
+  <section>
+    <h2>月度消费柱状图（ECharts）</h2>
+    <div id="bar-chart" class="chart-box"></div>
+
+    <h2>消费趋势折线图（Chart.js）</h2>
+    <canvas id="line-chart" class="chart-box"></canvas>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script src="app1.js"></script>
+</body>
+</html>
