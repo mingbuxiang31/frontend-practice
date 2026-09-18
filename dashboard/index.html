@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图书馆数据看板</title>
+  <link href="libs/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .chart-box { height: 360px; }
+    #status { display: none; }
+  </style>
+</head>
+<body class="container py-4">
+  <header>
+    <h1>图书馆数据看板</h1>
+    <p id="sub-title">数据来源：课程统一数据集</p>
+  </header>
+
+  <p id="status" class="alert alert-warning"></p>
+
+  <section class="row g-3 mb-4" id="cards"></section>
+
+  <section class="row g-3">
+    <div>
+      <h2>各月借阅量（ECharts柱状图）</h2>
+      <div id="bar-chart"></div>
+    </div>
+    <div>
+      <h2>借阅趋势（Chart.js折线图）</h2>
+      <div><canvas id="line-chart"></canvas></div>
+    </div>
+  </section>
+
+  <script src="libs/jquery-3.7.1.min.js"></script>
+  <script src="libs/bootstrap.bundle.min.js"></script>
+  <script src="libs/echarts.min.js"></script>
+  <script src="libs/chart.umd.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
+// app.js
+const state = { data: null };
+
+const loadData = async () => {
+  $('#status').text('加载中...').show();
+  try {
+    const response = await fetch('data/books.json');
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+    const data = await response.json();
+    if (data.series.length === 0) {
+      $('#status').text('暂无数据').show();
+      return;
+    }
+    state.data = data;
+    $('#sub-title').text(data.title + ' · 数据来源：课程统一数据集');
+    $('#status').hide();
+    renderCards(data);
+    renderBarChart(data);
+    renderLineChart(data);
+  } catch (error) {
+    $('#status').text('加载失败：' + error.message).show();
+  }
+};
+
+const renderCards = (data) => {
+  const months = data.months;
+  data.series.forEach(s => {
+    const total = s.counts.reduce((sum, n) => sum + n, 0);
+    $('#cards').append(`
+      <div>
+        <div>
+          <div>
+            <h3 class="card-title h6">${s.category}</h3>
+            <p class="card-text fs-4">${total}</p>
+            <p class="card-text small text-muted">共${months.length}个月累计借阅</p>
+          </div>
+        </div>
+      </div>
+    `);
+  });
+};
+
+loadData();
