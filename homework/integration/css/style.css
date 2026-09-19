@@ -1,0 +1,130 @@
+/* =========================================================
+   校园公共信息与数据展示中心 - 自定义样式（模块二：样式与响应式）
+   引入顺序：Bootstrap 5 之后引入本文件，便于覆盖默认样式
+   ========================================================= */
+
+/* 主题变量：延续“校园”主题的蓝绿配色 */
+:root {
+  --campus-blue: #1565c0;
+  --campus-blue-dark: #0d47a1;
+  --campus-green: #2e7d32;
+  --campus-red: #b71c1c;
+  --campus-gradient: linear-gradient(135deg, var(--campus-blue-dark), var(--campus-blue) 55%, var(--campus-green));
+  --section-offset: 72px; /* 固定导航高度，锚点跳转时留出的空隙 */
+}
+
+html {
+  scroll-behavior: smooth; /* 导航锚点平滑滚动 */
+}
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+}
+
+/* 锚点定位避开固定导航 */
+section[id], header[id], footer[id] {
+  scroll-margin-top: var(--section-offset);
+}
+
+/* ---------- 导航 ---------- */
+#mainNav {
+  background: rgba(13, 71, 161, 0.92);
+  backdrop-filter: blur(4px);
+}
+#mainNav .navbar-brand,
+#mainNav .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+}
+#mainNav .nav-link:hover,
+#mainNav .nav-link:focus {
+  color: #fff;
+}
+/* 滚动监听：当前区块的导航项高亮 */
+#mainNav .nav-link.active {
+  color: #fff;
+  font-weight: 600;
+  border-bottom: 2px solid #9fc3f8;
+}
+
+/* ---------- 首页横幅 ---------- */
+.hero {
+  background: var(--campus-gradient);
+  padding-top: var(--section-offset); /* 给固定导航让位 */
+}
+.stat-card {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+}
+.stat-num {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.stat-label {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+}
+
+/* ---------- 区块标题 ---------- */
+.section-title {
+  padding-left: 0.75rem;
+  border-left: 5px solid var(--campus-blue);
+  margin-bottom: 1.5rem;
+}
+#three .section-title { border-left-color: var(--campus-green); }
+#charts .section-title { border-left-color: var(--campus-red); }
+
+/* ---------- 公告卡片 ---------- */
+.post-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.post-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.5rem 1rem rgba(13, 71, 161, 0.15) !important;
+}
+/* 分类徽章配色（通过 data-cat 属性区分） */
+.badge[data-cat="通知"]     { background: var(--campus-blue); }
+.badge[data-cat="活动"]     { background: var(--campus-green); }
+.badge[data-cat="讲座"]     { background: #f57f17; }
+.badge[data-cat="失物招领"] { background: #00838f; }
+
+/* ---------- 图表容器 ---------- */
+#three .ratio iframe { border: 0; }
+
+/* =========================================================
+   三档响应式适配
+   ========================================================= */
+
+/* 第一档：手机（<576px）—— 单列、压缩高度 */
+@media (max-width: 575.98px) {
+  .hero h1 { font-size: 1.6rem; }
+  .hero .lead { font-size: 1rem; }
+  .stat-num { font-size: 1.4rem; }
+  .chart-box { height: 240px; }
+  .section-title { font-size: 1.25rem; }
+  .btn-group { width: 100%; }          /* 筛选按钮撑满一行 */
+  .btn-group .btn { flex: 1; padding-inline: 0.4rem; }
+}
+
+/* 第二档：平板（576px ~ 991px）—— 中等布局 */
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .hero h1 { font-size: 2rem; }
+  .chart-box { height: 300px; }
+  #quickStats .stat-card { padding: 0.75rem; }
+}
+
+/* 第三档：桌面（>=992px）—— 图表并排、放大横幅 */
+@media (min-width: 992px) {
+  .chart-box { height: 380px; }
+  .hero { padding-block: calc(var(--section-offset) + 2rem) 3rem; }
+  .hero h1 { font-size: 2.6rem; }
+}
+
+/* 全局兜底：图表容器必须有高度，否则画布不显示 */
+.chart-box {
+  min-height: 220px;
+  position: relative;
+}

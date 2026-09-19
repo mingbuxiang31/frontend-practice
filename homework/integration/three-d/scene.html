@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园三维导览</title>
+  <!-- 模块六（加分）：A-Frame 三维场景
+       模块衔接：建筑列表来自同一份 ../data/data.json 的 buildings 字段 -->
+  <!-- 注意：1.5.0 的文件名带版本号，写成 dist/aframe.min.js 会 404 -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe-v1.5.0.min.js"></script>
+  <style>
+    /* HUD 覆盖层：叠在 a-frame 场景上方 */
+    body { margin: 0; font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif; }
+    .hud {
+      position: fixed; z-index: 10;
+      background: rgba(13, 71, 161, 0.82);
+      color: #fff; border-radius: 10px; padding: 10px 14px;
+      max-width: 280px; font-size: 14px; line-height: 1.5;
+    }
+    .hud h1 { font-size: 15px; margin: 0 0 4px; }
+    .hud-left  { top: 12px; left: 12px; }
+    .hud-right { top: 12px; right: 12px; background: rgba(255, 255, 255, 0.92); color: #263238; min-width: 180px; }
+    .hud-right h2 { font-size: 15px; margin: 0 0 4px; color: #0d47a1; }
+    .hud-right p  { margin: 0; }
+    .hud-right .tip { color: #90a4ae; font-size: 12px; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <!-- 左上：操作说明 -->
+  <div class="hud hud-left">
+    <h1>校园三维导览</h1>
+    拖动旋转视角 · 滚轮缩放 · WASD 移动<br>
+    点击建筑查看介绍
+  </div>
+
+  <!-- 右上：建筑信息卡（点击后更新） -->
+  <div class="hud hud-right" id="infoCard">
+    <h2 id="infoName">校园建筑</h2>
+    <p id="infoDesc">点击场景中的建筑查看介绍。</p>
+    <p class="tip">数据来源：data/data.json</p>
+  </div>
+
+  <a-scene cursor="rayOrigin: mouse" raycaster="objects: .clickable, #ground">
+    <!-- 环境（延续三维课堂的配色） -->
+    <a-sky color="#aee3f7"></a-sky>
+    <a-plane id="ground" rotation="-90 0 0" width="30" height="30" color="#7cb342"></a-plane>
+    <a-light type="ambient" color="#ffffff" intensity="0.7"></a-light>
+    <a-light type="directional" position="5 8 3" intensity="0.5"></a-light>
+
+    <!-- 装饰：校门旁旗杆与飘扬旗帜（沿用课堂七的动画写法） -->
+    <a-cylinder position="3.2 1.8 6" radius="0.05" height="3.6" color="#9e9e9e"></a-cylinder>
+    <a-box position="3.55 3.3 6" width="0.7" height="0.45" depth="0.03" color="#e53935"
+           animation="property: position; to: 3.62 3.3 6; dir: alternate; dur: 900; loop: true"></a-box>
+
+    <!-- 装饰：两棵树（树干 + 树冠） -->
+    <a-cylinder position="-3 0.6 4.5" radius="0.12" height="1.2" color="#6d4c41"></a-cylinder>
+    <a-cone position="-3 1.7 4.5" radius-bottom="0.7" radius-top="0.05" height="1.6" color="#33691e"></a-cone>
+    <a-cylinder position="-6 0.6 2" radius="0.12" height="1.2" color="#6d4c41"></a-cylinder>
+    <a-cone position="-6 1.7 2" radius-bottom="0.7" radius-top="0.05" height="1.6" color="#33691e"></a-cone>
+
+    <!-- 相机：站在校门内侧（z 小于校门的 6），平视整个校园，可用 WASD 走动 -->
+    <a-camera position="0 1.8 4.5"></a-camera>
+
+    <!-- 建筑由脚本根据 data.json 动态生成 -->
+  </a-scene>
+
+  <script>
+    // file:// 打开时 fetch 会失败，降级使用这份数据（与 data/data.json 的 buildings 一致）
+    const FALLBACK_BUILDINGS = [
+      { id: 'gate', name: '校门', desc: '校园正门，由此进入中轴线广场。', x: 0, z: 6, w: 5, h: 3, d: 0.6, color: '#b71c1c' },
+      { id: 'teaching', name: '第一教学楼', desc: '公共课与晚自习的主要场地。', x: -4, z: -2, w: 3, h: 2.4, d: 2, color: '#efeeee' },
+      { id: 'library', name: '图书馆', desc: '数据看板中的借阅数据就来自这里。', x: 0, z: -5, w: 4, h: 3, d: 2.4, color: '#fff8e1' },
+      { id: 'lab', name: '实验楼', desc: '理工类实验与项目实训场地。', x: 4, z: -3, w: 2.6, h: 2.8, d: 2, color: '#e3f2fd' },
+      { id: 'dorm', name: '学生宿舍', desc: '生活区，位于校园东侧。', x: 3.5, z: 3, w: 2.2, h: 3.2, d: 2.2, color: '#f3e5f5' }
+    ];
+
+    const sceneEl = document.querySelector('a-scene');
+    let selectedBox = null; // 当前选中的建筑
+
+    // 加载同一份数据文件，保证三维页与主页面数据一致
+    fetch('../data/data.json')
+      .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
+      .then(data => buildCampus(data.buildings))
+      .catch(() => buildCampus(FALLBACK_BUILDINGS));
+
+    function buildCampus(buildings) {
+      // 事件驱动的单次初始化：loaded 只触发一次，
+      // 若 fetch 返回时场景已经 loaded（hasLoaded=true），必须立即生成，否则建筑永远不会出现
+      if (sceneEl.hasLoaded) {
+        createBuildings(buildings);
+      } else {
+        sceneEl.addEventListener('loaded', () => createBuildings(buildings));
+      }
+    }
+
+    function createBuildings(buildings) {
+      buildings.forEach(b => {
+          // 建筑主体（可点击）
+          const box = document.createElement('a-box');
+          box.setAttribute('class', 'clickable');
+          box.setAttribute('position', `${b.x} ${b.h / 2} ${b.z}`);
+          box.setAttribute('width', b.w);
+          box.setAttribute('height', b.h);
+          box.setAttribute('depth', b.d);
+          box.setAttribute('color', b.color);
+          box.setAttribute('shadow', 'cast: true; receive: true');
+          box.addEventListener('click', () => selectBuilding(box, b));
+          sceneEl.appendChild(box);
+
+          // 屋顶
+          const roof = document.createElement('a-box');
+          roof.setAttribute('position', `${b.x} ${b.h + 0.12} ${b.z}`);
+          roof.setAttribute('width', b.w + 0.3);
+          roof.setAttribute('height', 0.25);
+          roof.setAttribute('depth', b.d + 0.3);
+          roof.setAttribute('color', '#b71c1c');
+          sceneEl.appendChild(roof);
+
+          // 建筑名称标签
+          const label = document.createElement('a-text');
+          label.setAttribute('value', b.name);
+          label.setAttribute('position', `${b.x} ${b.h + 0.9} ${b.z}`);
+          label.setAttribute('align', 'center');
+          label.setAttribute('color', '#263238');
+          label.setAttribute('width', 5);
+          sceneEl.appendChild(label);
+        });
+
+      // 点击草地取消选中
+      document.getElementById('ground').addEventListener('click', clearSelection);
+    }
+
+    function selectBuilding(box, b) {
+      if (selectedBox) {
+        selectedBox.setAttribute('material', 'color', selectedBox.dataset.color);
+      }
+      selectedBox = box;
+      box.dataset.color = b.color;
+      box.setAttribute('material', 'color', '#ffd54f'); // 高亮
+
+      document.getElementById('infoName').textContent = b.name;
+      document.getElementById('infoDesc').textContent = b.desc;
+    }
+
+    function clearSelection() {
+      if (!selectedBox) return;
+      selectedBox.setAttribute('material', 'color', selectedBox.dataset.color);
+      selectedBox = null;
+      document.getElementById('infoName').textContent = '校园建筑';
+      document.getElementById('infoDesc').textContent = '点击场景中的建筑查看介绍。';
+    }
+  </script>
+</body>
+</html>
