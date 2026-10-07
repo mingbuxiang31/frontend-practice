@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>公告中心 - 校园信息与数据展示中心</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .toolbar input, .toolbar select {
+      padding: 8px 10px; border: 1px solid #ccd2dc; border-radius: 6px; font-size: 14px;
+    }
+    .toolbar input { flex: 1; min-width: 160px; }
+    .notice-list .notice-item { padding: 12px 4px; border-bottom: 1px dashed #e0e4ea; }
+    .notice-list .notice-item h4 { margin: 4px 0; font-size: 16px; color: var(--main-dark); }
+    .notice-list .notice-item p { margin: 4px 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .empty { text-align: center; color: var(--muted); padding: 28px 0; }
+    form.add-form { display: grid; gap: 10px; }
+    form.add-form input, form.add-form select, form.add-form textarea {
+      padding: 8px 10px; border: 1px solid #ccd2dc; border-radius: 6px; font-size: 14px; width: 100%;
+    }
+    form.add-form textarea { min-height: 72px; resize: vertical; }
+    form.add-form button {
+      background: var(--main); color: #fff; border: none; border-radius: 6px;
+      padding: 10px; font-size: 15px; cursor: pointer;
+    }
+    form.add-form button:hover { background: var(--main-dark); }
+    @media (max-width: 640px) {
+      .toolbar { flex-direction: column; }
+      .toolbar input, .toolbar select { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <span class="brand">校园信息与数据展示中心</span>
+    <div class="links">
+      <a href="index.html">首页</a>
+      <a href="notice.html">公告中心</a>
+      <a href="data.html">数据看板</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <div id="status"></div>
+
+    <h2 class="section-title">公告查询</h2>
+    <div class="card">
+      <div class="toolbar">
+        <input id="keyword" type="search" placeholder="输入关键词搜索标题或内容…">
+        <select id="typeFilter">
+          <option value="">全部分类</option>
+          <option value="教学">教学</option>
+          <option value="活动">活动</option>
+          <option value="服务">服务</option>
+          <option value="紧急">紧急</option>
+        </select>
+      </div>
+      <div class="notice-list" id="noticeList">
+        <p class="empty">正在加载公告数据…</p>
+      </div>
+      <p class="empty" id="emptyTip" style="display:none">没有符合条件的公告，换个关键词试试。</p>
+    </div>
+
+    <h2 class="section-title">发布公告</h2>
+    <div class="card">
+      <form class="add-form" id="addForm">
+        <input id="fTitle" type="text" placeholder="公告标题（必填）" required>
+        <select id="fType" required>
+          <option value="">请选择分类</option>
+          <option value="教学">教学</option>
+          <option value="活动">活动</option>
+          <option value="服务">服务</option>
+          <option value="紧急">紧急</option>
+        </select>
+        <input id="fDate" type="date" required>
+        <textarea id="fContent" placeholder="公告内容（必填）" required></textarea>
+        <button type="submit">发布公告</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    校园信息与数据展示中心 · 公告中心 · 数据来源：data/notice.json（本地 JSON）
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/notice.js"></script>
+</body>
+</html>
